@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import ReactDom  from 'react-dom';
 import "./style.css"
 
 type ModalProps = {
@@ -8,14 +9,19 @@ type ModalProps = {
 }
 export default function Modal({children, open, doClosing}:ModalProps) {
     if(!open) return null;
-    return (
+    return ReactDom.createPortal(
     <>  
-        <div className='overlay'/>
+        <div className='overlay' onClick={()=>doClosing()}/>
         <div className='modal'>
-            <div>This is the Modal and here is the content:</div>
+            <h2>Modal Content:</h2>
+            <button
+                className='modal__close-btn' 
+                onClick={()=>doClosing()}>
+                &times;
+            </button>
             <div>{children}</div>
-            <button onClick={()=>doClosing()}>&times;</button>
         </div>
-    </>
+    </>,
+    document.getElementById('modal-portal')!
   )
 }
